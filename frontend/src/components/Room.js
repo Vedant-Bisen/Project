@@ -1,13 +1,11 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 
-export default class Room extends Component{
-    constructor(props){
-        super(props);
-    }
+export default class Room extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-    render(){
-        return(
-            <p>This is the Room page</p>
-        );
-    }
+  render() {
+    return <p>This is the Room page</p>;
+  }
 }
