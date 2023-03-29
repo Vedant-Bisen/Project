@@ -17,12 +17,13 @@ export default class ViewPlaylistPage extends Component {
     this.state = {
       Playlist_id: "",
       Playlist_name: "",
+      SpotifyAuthenticated: false,
     };
     this.hanldeRelaod = this.hanldeRelaod.bind(this);
+    this.authenticateSpotify = this.authenticateSpotify.bind(this);
   }
 
   hanldeRelaod(e) {
-
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -33,9 +34,29 @@ export default class ViewPlaylistPage extends Component {
     };
     fetch("/api/playlist-view", requestOptions).then((response) => {
       response.json().then((data) => {
-        console.log(data);
+        this.setState({ 
+          Playlist_id: data.playlist_id,
+          Playlist_name: data.playlist_name,
+        });
+        this.authenticateSpotify();
       });
     });
+  }
+
+  authenticateSpotify() {
+    fetch("/spotify/is-authenticated")
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({ spotifyAuthenticated: data.status });
+        console.log(data.status);
+        if (!data.status) {
+          fetch("/spotify/get-auth-url")
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.replace(data.url);
+            });
+        }
+      });
   }
 
   render() {
