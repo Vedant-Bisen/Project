@@ -20,9 +20,9 @@ export default class HomePage extends Component {
       <Router>
         <Switch>
           <Route exact path="/">
-            <p>This is the not the HomePage page</p>
+            <p>This is the HomePage page</p>
           </Route>
-          <Route path="/join" component={ViewPlaylistPage} />
+          <Route path="/join" component={RoomJoinPage} />
           <Route path="/create" component={CreateRoomPage} />
           <Route path="/viewplaylist" Component={ViewPlaylistPage} />
         </Switch>
