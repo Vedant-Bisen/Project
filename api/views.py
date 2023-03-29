@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, status
 from .serializers import RoomSerializer, CreateRoomSerializer, PlaylistSerializer
-from .models import Room
+from .models import Room, Playlists
 from rest_framework.views import APIView
 from rest_framework.response import Response
 

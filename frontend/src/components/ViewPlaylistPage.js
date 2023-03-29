@@ -10,7 +10,6 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Collapse } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
 
 export default class ViewPlaylistPage extends Component {
   constructor(props) {
@@ -23,6 +22,7 @@ export default class ViewPlaylistPage extends Component {
   }
 
   hanldeRelaod(e) {
+
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
