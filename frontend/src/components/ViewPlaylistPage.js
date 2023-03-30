@@ -15,15 +15,15 @@ export default class ViewPlaylistPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Playlist_id: "",
-      Playlist_name: "",
+      Playlist_id: "None",
+      Playlist_name: "None",
       SpotifyAuthenticated: false,
     };
-    this.hanldeRelaod = this.hanldeRelaod.bind(this);
+    this.handleReload = this.handleReload.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
   }
 
-  hanldeRelaod(e) {
+  handleReload(e) {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -32,15 +32,17 @@ export default class ViewPlaylistPage extends Component {
         playlist_name: this.state.Playlist_name,
       }),
     };
+    this.authenticateSpotify();
+    console.log("reloaded");
     fetch("/api/playlist-view", requestOptions).then((response) => {
       response.json().then((data) => {
-        this.setState({ 
+        this.setState({
           Playlist_id: data.playlist_id,
           Playlist_name: data.playlist_name,
         });
-        this.authenticateSpotify();
       });
     });
+    console.log(this.state.Playlist_id);
   }
 
   authenticateSpotify() {
@@ -71,7 +73,7 @@ export default class ViewPlaylistPage extends Component {
           <Button
             color="primary"
             variant="contained"
-            onClick={this.hanldeRelaod}
+            onClick={this.handleReload}
           >
             Reload
           </Button>
