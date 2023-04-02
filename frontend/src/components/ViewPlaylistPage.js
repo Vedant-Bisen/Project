@@ -71,7 +71,6 @@ export default class ViewPlaylistPage extends Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({}),
     };
-    console.log("Authencateding");
     this.authenticateSpotify();
     this.getCurrentPlaylist();
     console.log(this.state.playlist_details.playlist_name);
@@ -108,7 +107,7 @@ export default class ViewPlaylistPage extends Component {
             </ul>
           </Typography>
         </Grid>
-``
+        ``
         <Grid item xs={12} align="center">
           <Button
             color="primary"
