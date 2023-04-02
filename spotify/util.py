@@ -89,7 +89,7 @@ def create_playlist(session_key, endpoint, playlist_name, description=None, publ
 
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + tokens
+        "Authorization": "Bearer " + tokens.access_token
     }
 
     data = {
