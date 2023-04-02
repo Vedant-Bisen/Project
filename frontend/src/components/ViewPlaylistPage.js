@@ -69,15 +69,15 @@ export default class ViewPlaylistPage extends Component {
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: this.state.code }),
+      body: JSON.stringify({}),
     };
+    console.log("Authencateding");
     this.authenticateSpotify();
     this.getCurrentPlaylist();
     console.log(this.state.playlist_details.playlist_name);
   }
 
   render() {
-    this.getCurrentPlaylist();
     return (
       <Grid container spaceing={3}>
         <Grid item xs={12} align="center">
@@ -96,7 +96,7 @@ export default class ViewPlaylistPage extends Component {
 
               <li class="table-row">
                 <div class="col col-1" data-label="Username">
-                  {this.state.playlist_details.playlist_name[0]}
+                  {this.state.playlist_details.playlist_name.map}
                 </div>
                 <div class="col col-2" data-label="Owner">
                   {this.state.playlist_details.playlist_owner[1]}
@@ -108,7 +108,7 @@ export default class ViewPlaylistPage extends Component {
             </ul>
           </Typography>
         </Grid>
-
+``
         <Grid item xs={12} align="center">
           <Button
             color="primary"
