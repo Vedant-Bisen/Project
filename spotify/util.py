@@ -1,6 +1,5 @@
 from .models import SpotifyToken
 from .credentails import CLIENT_ID, CLIENT_SECRET
-from rest_framework.response import Response
 from requests import post, put, get
 from django.utils import timezone
 from datetime import timedelta
