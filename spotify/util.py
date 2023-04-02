@@ -1,3 +1,6 @@
+import requests
+import base64
+import json
 from .models import SpotifyToken
 from .credentails import CLIENT_ID, CLIENT_SECRET
 from requests import post, put, get
@@ -5,6 +8,7 @@ from django.utils import timezone
 from datetime import timedelta
 
 BASE_URL = "https://api.spotify.com/v1/me/"
+
 
 def get_user_tokens(session_id):
     user_tokens = SpotifyToken.objects.filter(user=session_id)
@@ -67,13 +71,38 @@ def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
     headers = {"Content-Type": "application/json",
                'authorization': "Bearer " + tokens.access_token}
 
-    if post_:
-        post_(BASE_URL + endpoint, headers=headers)
-    if put_:
-        put_(BASE_URL + endpoint, headers=headers)
+    if post:
+        post(BASE_URL + endpoint, headers=headers)
+    if put:
+        put(BASE_URL + endpoint, headers=headers)
 
     Response = get(BASE_URL + endpoint, {}, headers=headers)
     try:
         return Response.json()
     except:
         return {'Error': 'Issue with request'}
+
+
+def create_playlist(session_key, endpoint, playlist_name, description=None, public=True, collaborative=False,post_ =False,put_ =False):
+    # You would need to implement this function to get the access token
+    tokens = get_user_tokens(session_key)
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + tokens.access_token
+    }
+
+    data = {
+        "name": playlist_name,
+        "description": description,
+        "public": public,
+        "collaborative": collaborative
+    }
+    print(data)
+
+    response = post(BASE_URL + endpoint, headers=headers, json=data)
+    print(response.json())
+    if response.status_code != 201:
+        return {'error': 'Failed to create playlist'}
+
+    return response.json()

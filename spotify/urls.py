@@ -6,5 +6,5 @@ urlpatterns = [
     path('redirect', spotify_callback),
     path('is-authenticated', IsAuthenticated.as_view()),
     path('playlist', Playlist.as_view()),
+    path('create-playlist', CreatePlaylist.as_view()),
 ]
- 

@@ -9,5 +9,6 @@ urlpatterns = [
     path('create', index),
     path('join/1', index),
     path('viewplaylist', index),
+    path('createplaylist', index),
 
 ]

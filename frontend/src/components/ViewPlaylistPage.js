@@ -16,22 +16,37 @@ export default class ViewPlaylistPage extends Component {
     super(props);
     this.state = {
       SpotifyAuthenticated: false,
-      playlist_details: {},
+      playlist_details: {
+        playlist_id: [],
+        playlist_name: [],
+        playlist_owner: [],
+        playlist_url: [],
+      },
     };
     this.handleReload = this.handleReload.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
     this.getCurrentPlaylist = this.getCurrentPlaylist.bind(this);
   }
 
+  // componentDidMount() {
+  //   this.interval = setInterval(this.handleReload, 1000);
+  // }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
 
   getCurrentPlaylist() {
-    fetch("/spotify/playlist").then((response) => {
-      if (!response.ok) {
-        return {};
-      } else {
-        return response.json();
-      }
-    }).then((data) => {this.setState({playlist_details: data})});
+    fetch("/spotify/playlist")
+      .then((response) => {
+        if (!response.ok) {
+          return {};
+        } else {
+          return response.json();
+        }
+      })
+      .then((data) => {
+        this.setState({ playlist_details: data });
+      });
   }
 
   authenticateSpotify() {
@@ -39,7 +54,7 @@ export default class ViewPlaylistPage extends Component {
       .then((response) => response.json())
       .then((data) => {
         this.setState({ spotifyAuthenticated: data.status });
-        console.log(data.status);
+        // console.log(data.status);
         if (!data.status) {
           fetch("/spotify/get-auth-url")
             .then((response) => response.json())
@@ -50,41 +65,50 @@ export default class ViewPlaylistPage extends Component {
       });
   }
   handleReload(e) {
+    console.log("reloaded");
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        playlist_id: this.state.Playlist_id,
-        playlist_name: this.state.Playlist_name,
-      }),
+      body: JSON.stringify({ code: this.state.code }),
     };
     this.authenticateSpotify();
     this.getCurrentPlaylist();
-    console.log("reloaded");
-    fetch("/api/playlist-view", requestOptions).then((response) => {
-      response.json().then((data) => {
-        this.setState({
-          Playlist_id: data.playlist_id,
-          Playlist_name: data.playlist_name,
-          Playlist_owner: data.playlist_owner,
-          Playlist_url: data.playlist_url,
-        });
-      });
-    });
-    console.log(this.state.Playlist_id);
+    console.log(this.state.playlist_details.playlist_name);
   }
 
-
-
   render() {
+    this.getCurrentPlaylist();
     return (
-      <Grid container spaceing={1}>
+      <Grid container spaceing={3}>
         <Grid item xs={12} align="center">
           <Typography component="h4" variant="h4">
             View Playlist
           </Typography>
         </Grid>
-        {this.state.playlist_details.items  }
+        <Grid item xs={12} align="center">
+          <Typography component="h6" variant="h6">
+            <ul class="responsive-table">
+              <li class="table-header">
+                <div class="col col-1">Name</div>
+                <div class="col col-2">Owner </div>
+                <div class="col col-3">Site URL</div>
+              </li>
+
+              <li class="table-row">
+                <div class="col col-1" data-label="Username">
+                  {this.state.playlist_details.playlist_name[0]}
+                </div>
+                <div class="col col-2" data-label="Owner">
+                  {this.state.playlist_details.playlist_owner[1]}
+                </div>
+                <div class="col col-3" data-label="Site URL">
+                  {this.state.playlist_details.playlist_url[1]}
+                </div>
+              </li>
+            </ul>
+          </Typography>
+        </Grid>
+
         <Grid item xs={12} align="center">
           <Button
             color="primary"

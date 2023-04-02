@@ -75,22 +75,62 @@ class Playlist(APIView):
         playlist_name = []
         playlist_owner = []
         playlist_url = []
+        playlist_image = []
         items = response.get('items')
         for item in items:
-            playlist_id.append(item.get('id'))
-            playlist_name.append(item.get('name'))
-            playlist_owner.append(item.get('owner').get('display_name'))
-            playlist_url.append(item.get('external_urls').get('spotify'))
+            p_id = item.get('id')
+            p_name = item.get('name')
+            p_owner = item.get('owner').get('display_name')
+            p_url = item.get('external_urls').get('spotify')
+            try:
+                p_image = item.get('images')[0].get('url')
+            except:
+                p_image = None
 
-        for i in range(len(playlist_id)):
-            Playlists.objects.create(
-                Playlist_id=playlist_id[i], Playlist_name=playlist_name[i], Playlist_owner=playlist_owner[i], Playlist_url=playlist_url[i])
+            playlist_id.append(p_id)
+            playlist_name.append(p_name)
+            playlist_owner.append(p_owner)
+            playlist_url.append(p_url)
+            playlist_image.append(p_image)
+            # print(p_id, p_name, p_owner, p_url)
+
+            try:
+                Playlists.objects.all()
+
+            except Playlists.DoesNotExist:
+                if Playlists.objects.filter(Playlist_id=p_id).exists():
+                    Playlists.objects.filter(Playlist_id=p_id).update(
+                        Playlist_name=p_name, Playlist_owner=p_owner, Playlist_url=p_url)
+                else:
+                    Playlists.objects.create(
+                        Playlist_id=p_id, Playlist_name=p_name, Playlist_owner=p_owner, Playlist_url=p_url)
 
         response = {
             'playlist_id': playlist_id,
             'playlist_name': playlist_name,
             'playlist_owner': playlist_owner,
             'playlist_url': playlist_url,
+            'playlist_image': playlist_image,
         }
 
         return Response(response, status=status.HTTP_200_OK)
+
+
+class CreatePlaylist(APIView):
+    def post(self, request, format=None):
+        if not is_spotify_authenticated(self.request.session.session_key):
+            request.session.create()
+
+        endpoint = "playlists"
+        name = request.data.get('playlistName')
+        description = request.data.get('description')
+        public = request.data.get('public')
+        collaborative = request.data.get('collaborative')
+        print(name, description, public, collaborative)
+        response = create_playlist(
+            self.request.session.session_key, endpoint, name, description, public, collaborative)
+
+        if 'error' in response or 'id' not in response:
+            return Response({}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(response, status=status.HTTP_201_CREATED)

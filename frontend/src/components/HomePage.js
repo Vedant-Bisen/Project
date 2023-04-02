@@ -3,6 +3,7 @@ import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
 import Room from "./Room";
 import ViewPlaylistPage from "./ViewPlaylistPage";
+import CreatePlaylistPage from "./CreatePlaylistPage";
 import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
 import {
   BrowserRouter as Router,
@@ -45,6 +46,9 @@ export default class HomePage extends Component {
             <Button color="primary" to="/viewplaylist" component={Link}>
               View Playlist
             </Button>
+            <Button color="primary" to="/createplaylist" component={Link}>
+              Create Playlist
+            </Button>
             <Button color="default" to="/join" component={Link}>
               Join a room
             </Button>
@@ -81,6 +85,8 @@ export default class HomePage extends Component {
           <Route path="/join" component={RoomJoinPage} />
           <Route path="/viewplaylist" component={ViewPlaylistPage} />
           <Route path="/create" component={CreateRoomPage} />
+          <Route path="/createplaylist" component={CreatePlaylistPage} />
+
           <Route
             path="/room/:roomCode"
             render={(props) => {
