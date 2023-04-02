@@ -13,8 +13,10 @@ class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
         fields = ('guest_can_pause', 'votes_to_skip')
-        
+
+
 class PlaylistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Playlists
-        fields = ('Playlist_id', 'Playlist_name')
+        fields = ('Playlist_id', 'Playlist_name',
+                  'Playlist_owner', 'Playlist_url')

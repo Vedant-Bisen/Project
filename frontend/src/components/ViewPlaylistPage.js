@@ -15,34 +15,23 @@ export default class ViewPlaylistPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      Playlist_id: "None",
-      Playlist_name: "None",
       SpotifyAuthenticated: false,
+      playlist_details: {},
     };
     this.handleReload = this.handleReload.bind(this);
     this.authenticateSpotify = this.authenticateSpotify.bind(this);
+    this.getCurrentPlaylist = this.getCurrentPlaylist.bind(this);
   }
 
-  handleReload(e) {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        playlist_id: this.state.Playlist_id,
-        playlist_name: this.state.Playlist_name,
-      }),
-    };
-    this.authenticateSpotify();
-    console.log("reloaded");
-    fetch("/api/playlist-view", requestOptions).then((response) => {
-      response.json().then((data) => {
-        this.setState({
-          Playlist_id: data.playlist_id,
-          Playlist_name: data.playlist_name,
-        });
-      });
-    });
-    console.log(this.state.Playlist_id);
+
+  getCurrentPlaylist() {
+    fetch("/spotify/playlist").then((response) => {
+      if (!response.ok) {
+        return {};
+      } else {
+        return response.json();
+      }
+    }).then((data) => {this.setState({playlist_details: data})});
   }
 
   authenticateSpotify() {
@@ -60,6 +49,32 @@ export default class ViewPlaylistPage extends Component {
         }
       });
   }
+  handleReload(e) {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        playlist_id: this.state.Playlist_id,
+        playlist_name: this.state.Playlist_name,
+      }),
+    };
+    this.authenticateSpotify();
+    this.getCurrentPlaylist();
+    console.log("reloaded");
+    fetch("/api/playlist-view", requestOptions).then((response) => {
+      response.json().then((data) => {
+        this.setState({
+          Playlist_id: data.playlist_id,
+          Playlist_name: data.playlist_name,
+          Playlist_owner: data.playlist_owner,
+          Playlist_url: data.playlist_url,
+        });
+      });
+    });
+    console.log(this.state.Playlist_id);
+  }
+
+
 
   render() {
     return (
@@ -69,6 +84,7 @@ export default class ViewPlaylistPage extends Component {
             View Playlist
           </Typography>
         </Grid>
+        {this.state.playlist_details.items  }
         <Grid item xs={12} align="center">
           <Button
             color="primary"

@@ -25,3 +25,5 @@ class Room(models.Model):
 class Playlists(models.Model):
     Playlist_id = models.CharField(max_length=50, null=False)
     Playlist_name = models.CharField(max_length=50, null=False)
+    Playlist_owner = models.CharField(max_length=50, null=False)
+    Playlist_url = models.URLField(max_length=50, null=False)
