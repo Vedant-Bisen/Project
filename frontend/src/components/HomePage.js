@@ -48,6 +48,7 @@ export default class HomePage extends Component {
             </Button>
             <Button color="default" to="/join" component={Link}>
               Join a room
+<<<<<<< HEAD
 =======
             <Button color="primary" to="/join" component={Link}>
               Join a Room
@@ -55,6 +56,8 @@ export default class HomePage extends Component {
             </Button>
             <Button color="default" to="/viewplaylist" component={Link}>
               View Playlist
+=======
+>>>>>>> 245f0b7a307cddfcb849a1d355d7c8293aec3106
             </Button>
             <Button color="secondary" to="/create" component={Link}>
               Create a Room
