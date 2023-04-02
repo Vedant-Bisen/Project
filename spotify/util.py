@@ -83,13 +83,13 @@ def execute_spotify_api_request(session_id, endpoint, post_=False, put_=False):
         return {'Error': 'Issue with request'}
 
 
-def create_playlist(session_key, endpoint, playlist_name, description=None, public=True, collaborative=False,post_ =False,put_ =False):
+def create_playlist(session_key, endpoint, playlist_name, description=None, public=True, collaborative=False, post_=False, put_=False):
     # You would need to implement this function to get the access token
     tokens = get_user_tokens(session_key)
 
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + tokens.access_token
+        "Authorization": "Bearer " + tokens
     }
 
     data = {
