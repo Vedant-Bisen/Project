@@ -40,13 +40,13 @@ export default class HomePage extends Component {
             House Party
           </Typography>
         </Grid>
-        <Grid item xs={12} align="center">
+        <Grid item xs={8} align="center">
           <ButtonGroup disableElevation variant="contained" color="primary">
             <Button color="primary" to="/viewplaylist" component={Link}>
               View Playlist
             </Button>
             <Button color="default" to="/join" component={Link}>
-              Join a Room
+              Join a room
             </Button>
             <Button color="secondary" to="/create" component={Link}>
               Create a Room

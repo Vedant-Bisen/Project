@@ -45,26 +45,35 @@ class CreateRoomView(APIView):
 class PlaylistView(APIView):
     serializer_class = PlaylistSerializer
 
-    def post(self,request,format=None):
+    def post(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
 
         serializer = self.serializer_class(data=request.data)
+        print("SERIALIZER: ", serializer.is_valid())
         if serializer.is_valid():
             playlist_id = serializer.data.get('Playlist_id')
             playlist_name = serializer.data.get('Playlist_name')
+            playlist_owner = serializer.data.get('Playlist_owner')
+            playlist_URL = serializer.data.get('Playlist_URL')
 
             queryset = Playlists.objects.filter(Playlist_id=playlist_id)
             if not queryset.exists():
-                Playlist = queryset[0]
-                Playlist.Playlist_id = playlist_id
-                Playlist.Playlist_name = playlist_name
-                Playlist.save(update_fields=['Playlist_id','Playlist_name'])
+                playlist = queryset[0]
+                playlist.Playlist_id = playlist_id
+                playlist.Playlist_name = playlist_name
+                playlist.Playlist_owner = playlist_owner
+                playlist.Playlist_url = playlist_URL
+                playlist.save(update_fields=[
+                              'Playlist_id', 'Playlist_name', 'Playlist_owner', 'Playlist_URL'])
+                return Response(PlaylistSerializer(playlist).data, status=status.HTTP_200_OK)
             else:
-                Playlist = queryset[0]
-                Playlist.Playlist_id = playlist_id
-                Playlist.Playlist_name = playlist_name
-                Playlist.save()
+                playlist = queryset[0]
+                playlist.Playlist_id = playlist_id
+                playlist.Playlist_name = playlist_name
+                playlist.Playlist_owner = playlist_owner
+                playlist.Playlist_url = playlist_URL
+                playlist.save()
+                return Response(PlaylistSerializer(playlist).data, status=status.HTTP_200_OK)
 
-            return Response(PlaylistSerializer(Playlist).data,status=status.HTTP_200_OK)
-
+        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)

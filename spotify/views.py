@@ -6,12 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import SpotifyToken
 from .util import *
+from api.models import Playlists
 
 
 # Create your views here.
 # Scopes = user-read-playback-state user-modify-playback-state user-read-currently-playing
-
-
 
 
 class AuthURL(APIView):
@@ -37,7 +36,7 @@ def spotify_callback(request, format=None):
         'client_id': CLIENT_ID,
         'client_secret': CLIENT_SECRET,
     }).json()
- 
+
     access_token = response.get("access_token")
     token_type = response.get("token_type")
     refresh_token = response.get("refresh_token")
@@ -68,21 +67,30 @@ class Playlist(APIView):
         endpoint = "playlists"
         response = execute_spotify_api_request(
             self.request.session.session_key, endpoint)
-        
+
         if 'error' in response or 'items' not in response:
             return Response({}, status=status.HTTP_404_NOT_FOUND)
-        
-        playlist_name = ''
-        items = response.get('items')
-        owner = response.get('owner').get('display_name')
-        for i, playlist in enumerate(items):
-            if i > 0:
-                playlist_name += ', '
-            playlist_name += playlist.get('name')
-        print(playlist_name)
-        
-        # print(playlist_name)
-        
-        
-        return Response(response, status=status.HTTP_200_OK)
 
+        playlist_id = []
+        playlist_name = []
+        playlist_owner = []
+        playlist_url = []
+        items = response.get('items')
+        for item in items:
+            playlist_id.append(item.get('id'))
+            playlist_name.append(item.get('name'))
+            playlist_owner.append(item.get('owner').get('display_name'))
+            playlist_url.append(item.get('external_urls').get('spotify'))
+
+        for i in range(len(playlist_id)):
+            Playlists.objects.create(
+                Playlist_id=playlist_id[i], Playlist_name=playlist_name[i], Playlist_owner=playlist_owner[i], Playlist_url=playlist_url[i])
+
+        response = {
+            'playlist_id': playlist_id,
+            'playlist_name': playlist_name,
+            'playlist_owner': playlist_owner,
+            'playlist_url': playlist_url,
+        }
+
+        return Response(response, status=status.HTTP_200_OK)
