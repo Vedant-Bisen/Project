@@ -3,7 +3,6 @@ import RoomJoinPage from "./RoomJoinPage";
 import CreateRoomPage from "./CreateRoomPage";
 import Room from "./Room";
 import ViewPlaylistPage from "./ViewPlaylistPage";
-import CreatePlaylist from "./CreatePlaylist";
 import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
 import {
   BrowserRouter as Router,
@@ -12,6 +11,7 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
+
 
 export default class HomePage extends Component {
   constructor(props) {
@@ -42,11 +42,19 @@ export default class HomePage extends Component {
         </Grid>
         <Grid item xs={8} align="center">
           <ButtonGroup disableElevation variant="contained" color="primary">
+<<<<<<< HEAD
             <Button color="primary" to="/viewplaylist" component={Link}>
               View Playlist
             </Button>
             <Button color="default" to="/join" component={Link}>
               Join a room
+=======
+            <Button color="primary" to="/join" component={Link}>
+              Join a Room
+>>>>>>> parent of 258b7b93 (main)
+            </Button>
+            <Button color="default" to="/viewplaylist" component={Link}>
+              View Playlist
             </Button>
             <Button color="secondary" to="/create" component={Link}>
               Create a Room
