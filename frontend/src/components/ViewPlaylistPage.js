@@ -73,7 +73,7 @@ export default class ViewPlaylistPage extends Component {
     };
     this.authenticateSpotify();
     this.getCurrentPlaylist();
-    console.log(this.state.playlist_details.playlist_name);
+    console.log(this.state.playlist_details.playlist_name[0]);
   }
 
   render() {
@@ -95,13 +95,13 @@ export default class ViewPlaylistPage extends Component {
 
               <li class="table-row">
                 <div class="col col-1" data-label="Username">
-                  {this.state.playlist_details.playlist_name.map}
+                  {this.state.playlist_details.playlist_name[0]}
                 </div>
                 <div class="col col-2" data-label="Owner">
-                  {this.state.playlist_details.playlist_owner[1]}
+                  {this.state.playlist_details.playlist_owner[0]}
                 </div>
                 <div class="col col-3" data-label="Site URL">
-                  {this.state.playlist_details.playlist_url[1]}
+                  {this.state.playlist_details.playlist_url[0]}
                 </div>
               </li>
             </ul>
