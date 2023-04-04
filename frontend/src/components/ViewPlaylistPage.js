@@ -95,13 +95,19 @@ export default class ViewPlaylistPage extends Component {
 
               <li class="table-row">
                 <div class="col col-1" data-label="Username">
-                  {this.state.playlist_details.playlist_name[0]}
+                  {this.state.playlist_details.playlist_name.map((item) => {
+                    return <div>item</div>;
+                  })}
                 </div>
                 <div class="col col-2" data-label="Owner">
-                  {this.state.playlist_details.playlist_owner[0]}
+                  {this.state.playlist_details.playlist_owner.map((item) => {
+                    return <div>item</div>;
+                  })}
                 </div>
                 <div class="col col-3" data-label="Site URL">
-                  {this.state.playlist_details.playlist_url[0]}
+                  {this.state.playlist_details.playlist_url.map((item) => {
+                    return <div>item</div>;
+                  })}
                 </div>
               </li>
             </ul>
