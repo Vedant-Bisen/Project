@@ -137,7 +137,6 @@ class CreatePlaylist(APIView):
 
 
 class CurrentSong(APIView):
-    print("hello")
     def get(self, request, format=None):
         room_code = self.request.session.get('room_code')
         room = Room.objects.filter(code=room_code)
@@ -147,11 +146,13 @@ class CurrentSong(APIView):
             return Response({}, status=status.HTTP_404_NOT_FOUND)
         host = room.host
         endpoint = "player/currently-playing"
-        response = execute_spotify_api_request(host, endpoint)
+        response = execute_spotify_api_request(
+            self.request.session.session_key, endpoint)
 
         if 'error' in response or 'item' not in response:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+        print("hello")
         item = response.get('item')
         duration = item.get('duration_ms')
         progress = response.get('progress_ms')
