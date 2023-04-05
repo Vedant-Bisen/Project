@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from requests import Request, post, put, get
 from rest_framework.response import Response
 from rest_framework import status
-from .models import SpotifyToken, Vote
+from .models import Vote
 from .util import *
 from api.models import Playlists, Room
 
@@ -138,11 +138,9 @@ class CreatePlaylist(APIView):
 
 class CurrentSong(APIView):
     def get(self, request, format=None):
-        # session_id = self.request.session.session_key
-        print(self.request.session.get("room_code"))
         room_code = self.request.session.get('room_code')
-        print(room_code)
-        room = Room.objects.filter(code=room_code)
+        session_id = self.request.session.session_key
+        room = Room.objects.filter(host=session_id)
         if room.exists():
             room = room[0]
         else:
@@ -195,11 +193,10 @@ class CurrentSong(APIView):
             votes = Vote.objects.filter(room=room).delete()
 
 
-
 class PauseSong(APIView):
     def put(self, response, format=None):
-        room_code = self.request.session.get('room_code')
-        room = Room.objects.filter(code=room_code)[0]
+        session_id = self.request.session.session_key
+        room = Room.objects.filter(host=session_id)[0]
         if self.request.session.session_key == room.host or room.guest_can_pause:
             pause_song(room.host)
             return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -209,8 +206,8 @@ class PauseSong(APIView):
 
 class PlaySong(APIView):
     def put(self, response, format=None):
-        room_code = self.request.session.get('room_code')
-        room = Room.objects.filter(code=room_code)[0]
+        session_id = self.request.session.session_key
+        room = Room.objects.filter(host=session_id)[0]
         if self.request.session.session_key == room.host or room.guest_can_pause:
             play_song(room.host)
             return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -220,8 +217,8 @@ class PlaySong(APIView):
 
 class SkipSong(APIView):
     def post(self, request, format=None):
-        room_code = self.request.session.get('room_code')
-        room = Room.objects.filter(code=room_code)[0]
+        session_id = self.request.session.session_key
+        room = Room.objects.filter(host=session_id)[0]
         votes = Vote.objects.filter(room=room, song_id=room.current_song)
         votes_needed = room.votes_to_skip
 

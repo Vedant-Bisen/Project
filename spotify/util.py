@@ -107,3 +107,15 @@ def create_playlist(session_key, endpoint, playlist_name, description=None, publ
         return {'error': 'Failed to create playlist'}
 
     return response.json()
+
+
+def play_song(session_id):
+    return execute_spotify_api_request(session_id, "player/play", put_=True)
+
+
+def pause_song(session_id):
+    return execute_spotify_api_request(session_id, "player/pause", put_=True)
+
+
+def skip_song(session_id):
+    return execute_spotify_api_request(session_id, "player/next", post_=True)
