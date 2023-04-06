@@ -49,7 +49,7 @@ export default class CreatePlaylistPage extends Component {
     fetch("/spotify/create-playlist", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        this.props.history.push("/createplaylist");
+        this.props.history.push("/viewplaylist");
       });
   }
 

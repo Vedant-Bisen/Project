@@ -28,12 +28,12 @@ export default class ViewPlaylistPage extends Component {
     this.getCurrentPlaylist = this.getCurrentPlaylist.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.interval = setInterval(this.handleReload, 1000);
-  // }
-  // componentWillUnmount() {
-  //   clearInterval(this.interval);
-  // }
+  componentDidMount() {
+    this.interval = setInterval(this.handleReload, 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
   getCurrentPlaylist() {
     fetch("/spotify/playlist")
@@ -106,8 +106,13 @@ export default class ViewPlaylistPage extends Component {
                 </div>
                 <div class="col col-3" data-label="Site URL">
                   {this.state.playlist_details.playlist_url.map((item) => {
-                    return <div>
-                      <a href={item} target="_">View on spotify</a></div>;
+                    return (
+                      <div>
+                        <a href={item} target="_">
+                          View on spotify
+                        </a>
+                      </div>
+                    );
                   })}
                 </div>
               </li>
